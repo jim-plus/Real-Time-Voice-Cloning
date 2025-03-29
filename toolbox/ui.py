@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
-import umap
+from umap import UMAP
 from PyQt5.QtCore import Qt, QStringListModel
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -34,7 +34,7 @@ colormap = np.array([
     [0, 0, 0],
     [183, 183, 183],
     [76, 255, 0],
-], dtype=np.float) / 255
+], dtype=np.complex128) / 255
 
 default_text = \
     "Welcome to the toolbox! To begin, load an utterance from your datasets or record one " \
@@ -115,7 +115,7 @@ class UI(QDialog):
                     "Drawing UMAP projections for the first time, this will take a few seconds.")
                 self.umap_hot = True
 
-            reducer = umap.UMAP(int(np.ceil(np.sqrt(len(embeds)))), metric="cosine")
+            reducer = UMAP(int(np.ceil(np.sqrt(len(embeds)))), metric="cosine")
             projections = reducer.fit_transform(embeds)
 
             speakers_done = set()
@@ -426,6 +426,8 @@ class UI(QDialog):
         self.app = QApplication(sys.argv)
         super().__init__(None)
         self.setWindowTitle("SV2TTS toolbox")
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
 
 
         ## Main layouts
