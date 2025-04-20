@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
-from umap import UMAP
+import umap.umap_ as umap
 from PyQt5.QtCore import Qt, QStringListModel
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -115,7 +115,7 @@ class UI(QDialog):
                     "Drawing UMAP projections for the first time, this will take a few seconds.")
                 self.umap_hot = True
 
-            reducer = UMAP(int(np.ceil(np.sqrt(len(embeds)))), metric="cosine")
+            reducer = umap.UMAP(int(np.ceil(np.sqrt(len(embeds)))), metric="cosine")
             projections = reducer.fit_transform(embeds)
 
             speakers_done = set()
@@ -426,9 +426,9 @@ class UI(QDialog):
         self.app = QApplication(sys.argv)
         super().__init__(None)
         self.setWindowTitle("SV2TTS toolbox")
+
         self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
         self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
-
 
         ## Main layouts
         # Root
